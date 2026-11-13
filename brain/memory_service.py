@@ -1068,7 +1068,17 @@ class MemoryService:
                 enriched["score"] = hybrid_score
                 by_id[mid] = enriched
 
-        ranked = sorted(by_id.values(), key=lambda r: r["score"], reverse=True)
+        all_sorted = sorted(by_id.values(), key=lambda r: r["score"], reverse=True)
+        if not all_sorted:
+            return []
+
+        # Adaptive relevance: keep top matches and items within reasonable proximity of top score
+        top_score = all_sorted[0]["score"]
+        cutoff = max(0.32, top_score * 0.55)
+        ranked = [
+            r for r in all_sorted
+            if r["score"] >= cutoff or r.get("bm25", 0.0) > 0.0 or any(t in r["subject_key"].lower() for t in query_terms)
+        ]
         return ranked[:limit]
 
     def _fetch_linked_constraints_and_failures(
