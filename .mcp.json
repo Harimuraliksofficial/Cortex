@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "knowledge-brain": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["-m", "brain.server"],
+      "env": {
+        "PYTHONPATH": ".",
+        "PYTHONIOENCODING": "utf-8"
+      }
+    }
+  }
+}

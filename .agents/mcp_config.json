@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "knowledge-brain": {
+      "command": "C:\\Users\\ASUS\\.pyenv\\pyenv-win\\versions\\3.11.9\\python.exe",
+      "args": [
+        "-m",
+        "brain.server"
+      ],
+      "env": {
+        "PYTHONPATH": "c:\\Users\\ASUS\\Documents\\files\\hackathon\\devhost"
+      }
+    }
+  }
+}
