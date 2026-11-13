@@ -41,10 +41,12 @@ def recall(
     workspace_path: str | None = None,
     session_id: str = "",
 ) -> dict[str, Any]:
-    """Retrieve compact, token-budgeted project context via hybrid semantic + BM25 search.
+    """MANDATORY ENTRYPOINT: Call recall FIRST on every task, question, or agent turn.
 
-    Returns open handovers, active decisions/constraints, linked failed attempts,
-    global preferences, and conflict warnings / honest abstentions when records contradict.
+    Use this BEFORE scanning files, running shell commands, or guessing project conventions.
+    Specifically triggers on questions about: project status, tech stack, architecture,
+    requirements, past decisions, constraints, task history, handovers, or what was done.
+    Retrieves compact, token-budgeted project context via hybrid semantic + BM25 search.
     """
     return get_service().recall(
         query=query,
@@ -71,10 +73,15 @@ def remember(
     session_id: str = "",
     workspace_path: str | None = None,
 ) -> dict[str, Any]:
-    """Store a durable decision, constraint, failed_attempt, or preference in Kuzu.
+    """MANDATORY PERSISTENCE: Store durable decisions, constraints, failed attempts, or tech choices.
 
+    Call this immediately whenever:
+    - A tech stack, library, or framework is chosen or changed (kind='decision')
+    - A requirement, validation rule, or security policy is introduced (kind='constraint')
+    - A bug, dependency conflict, or failed approach is discovered (kind='failed_attempt')
+    - A coding style or formatting rule is requested (kind='preference')
     Enforces the authority matrix (user > verified > agent), taint quarantine for
-    external_untrusted sources, deduplication, and branch-aware supersession.
+    external_untrusted sources, deduplication, and branch-aware supersession in Kuzu.
     """
     return get_service().remember(
         kind=kind,
@@ -103,7 +110,11 @@ def handoff(
     session_id: str = "",
     workspace_path: str | None = None,
 ) -> dict[str, Any]:
-    """Create a cross-agent checkpoint enriched with live Git HEAD and dirty files."""
+    """MANDATORY CHECKPOINT: Call at the end of any task, pause, milestone, or agent switch.
+
+    Automatically enriches the checkpoint with live Git HEAD commit and uncommitted dirty files.
+    Ensures the next session or agent resumes seamlessly with exact state and next steps.
+    """
     return get_service().handoff(
         summary=summary,
         next_steps=next_steps,
@@ -119,7 +130,12 @@ def forget(
     target: str,
     workspace_path: str | None = None,
 ) -> dict[str, Any]:
-    """Redact all memories, provenance sources, and handovers matching target, with 0-leak verification."""
+    """MANDATORY PRIVACY/CLEANUP: Redact obsolete memories, sensitive secrets, or rejected approaches.
+
+    Performs cascading redaction across Memory, Source provenance, and Handover tables
+    with mathematical 0-leak verification. Call whenever the user asks to remove, forget,
+    or delete past information.
+    """
     return get_service().forget(target=target, workspace_path=workspace_path)
 
 
