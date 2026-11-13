@@ -1,0 +1,5 @@
+kuzu>=0.7.0
+fastmcp>=2.0.0
+sentence-transformers>=3.0.0
+pytest>=8.0.0
+

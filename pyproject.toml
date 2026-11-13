@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "knowledge-brain"
+version = "0.1.0"
+description = "Kuzu-backed MCP Knowledge Brain for multi-agent coding memory (OpenCode, Antigravity)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "kuzu>=0.7.0",
+    "fastmcp>=2.0.0",
+    "sentence-transformers>=3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[project.scripts]
+knowledge-brain = "brain.server:main"
+
+[tool.setuptools.packages.find]
+include = ["brain*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

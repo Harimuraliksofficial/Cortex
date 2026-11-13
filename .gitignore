@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*.kuzu
+*.kuzu.wal
+.pytest_cache/
+.venv/
+.brain_bench/
+*.egg-info/
+build/
+dist/
+
