@@ -97,15 +97,17 @@ def handoff(summary: str, next_steps: str, blockers: str = "", repo_path: str = 
         db.close()
 
 @mcp.tool()
-def forget(target: str) -> str:
+def forget(target: str, repo_path: str = "") -> str:
     """
     Cascading verified deletion: scrubs all memories and handovers matching the target,
     and runs a verification scan to guarantee 0 data leaks.
+    Optionally pass repo_path to scope deletion, or omit to scrub globally.
     """
     db = get_db()
     service = MemoryService(db)
     try:
-        res = service.forget(target=target)
+        target_path = repo_path.strip() or None
+        res = service.forget(target=target, repo_path=target_path)
         if not res.get("verification_passed"):
             return f"⚠️ Deletion executed, but verification found {res['leak_count']} remaining traces."
         return (

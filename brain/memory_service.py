@@ -311,15 +311,24 @@ class MemoryService:
         Verified Cascading Deletion: Scrubs matching memories and handovers,
         guaranteeing zero data leaks.
         """
-        git_info = get_git_context(repo_path)
-        repo_id = git_info["repo_id"]
         cleaned_target = target.strip()
         if not cleaned_target:
             return {"status": "error", "message": "Empty target"}
 
+        # Determine scope: specific repo_id if repo_path provided, otherwise global scrub
+        rid_filter = None
+        if repo_path:
+            git_info = get_git_context(repo_path)
+            rid_filter = git_info["repo_id"]
+
         # 1. Scrub matching memories
-        find_m = "MATCH (m:Memory {repo_id: $rid}) RETURN m.id, m.title, m.content"
-        res = self.db.execute(find_m, {"rid": repo_id})
+        if rid_filter:
+            find_m = "MATCH (m:Memory {repo_id: $rid}) RETURN m.id, m.title, m.content"
+            res = self.db.execute(find_m, {"rid": rid_filter})
+        else:
+            find_m = "MATCH (m:Memory) RETURN m.id, m.title, m.content"
+            res = self.db.execute(find_m)
+
         to_scrub = []
         while res.has_next():
             row = res.get_next()
@@ -331,8 +340,13 @@ class MemoryService:
             self.db.execute("MATCH (m:Memory {id: $id}) DETACH DELETE m", {"id": mid})
 
         # 2. Scrub matching handovers
-        find_h = "MATCH (h:Handover {repo_id: $rid}) RETURN h.id, h.summary, h.next_steps, h.blockers"
-        res_h = self.db.execute(find_h, {"rid": repo_id})
+        if rid_filter:
+            find_h = "MATCH (h:Handover {repo_id: $rid}) RETURN h.id, h.summary, h.next_steps, h.blockers"
+            res_h = self.db.execute(find_h, {"rid": rid_filter})
+        else:
+            find_h = "MATCH (h:Handover) RETURN h.id, h.summary, h.next_steps, h.blockers"
+            res_h = self.db.execute(find_h)
+
         to_scrub_h = []
         while res_h.has_next():
             row = res_h.get_next()
@@ -344,11 +358,17 @@ class MemoryService:
         for hid in to_scrub_h:
             self.db.execute("MATCH (h:Handover {id: $id}) DELETE h", {"id": hid})
 
-        # 3. Post-deletion leak verification
-        v_res = self.db.execute(
-            "MATCH (m:Memory {repo_id: $rid}) WHERE m.status = 'active' RETURN m.title, m.content",
-            {"rid": repo_id}
-        )
+        # 3. Post-deletion leak verification scan
+        if rid_filter:
+            v_res = self.db.execute(
+                "MATCH (m:Memory {repo_id: $rid}) WHERE m.status = 'active' RETURN m.title, m.content",
+                {"rid": rid_filter}
+            )
+        else:
+            v_res = self.db.execute(
+                "MATCH (m:Memory) WHERE m.status = 'active' RETURN m.title, m.content"
+            )
+
         leak_count = 0
         while v_res.has_next():
             v_row = v_res.get_next()
