@@ -116,5 +116,8 @@ def forget(target: str) -> str:
     finally:
         db.close()
 
-if __name__ == "__main__":
+def main():
     mcp.run()
+
+if __name__ == "__main__":
+    main()

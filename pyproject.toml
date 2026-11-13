@@ -18,6 +18,9 @@ dev = [
     "pytest>=8.0.0"
 ]
 
+[project.scripts]
+cortex-brain = "brain.server:main"
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["brain*"]
