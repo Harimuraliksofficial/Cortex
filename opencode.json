@@ -1,0 +1,15 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "knowledge-brain": {
+        "type": "local",
+        "command": [
+          "python",
+          "-m",
+          "brain.server"
+        ]
+      }
+    }
+  }
+}

@@ -2,12 +2,8 @@
   "mcpServers": {
     "knowledge-brain": {
       "type": "stdio",
-      "command": "C:\\Users\\hmura\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
-      "args": ["-m", "brain.server"],
-      "env": {
-        "PYTHONPATH": "c:\\Users\\hmura\\Downloads\\eleven_eleven"
-      }
+      "command": "python",
+      "args": ["-m", "brain.server"]
     }
   }
 }
-

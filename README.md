@@ -1,4 +1,4 @@
-l̥# Knowledge Brain (`knowledge-brain`)
+# Knowledge Brain (`knowledge-brain`)
 
 A persistent, Kuzu-backed MCP Knowledge Brain for multi-agent coding memory (OpenCode, Antigravity, Claude Code).
 

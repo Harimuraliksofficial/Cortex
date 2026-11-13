@@ -7,6 +7,7 @@ from typing import Any
 
 from fastmcp import FastMCP
 
+from brain.activity_logger import log_activity
 from brain.memory_service import MemoryService
 
 mcp = FastMCP("knowledge-brain")
@@ -48,12 +49,31 @@ def recall(
     requirements, past decisions, constraints, task history, handovers, or what was done.
     Retrieves compact, token-budgeted project context via hybrid semantic + BM25 search.
     """
-    return get_service().recall(
+    res = get_service().recall(
         query=query,
         token_budget=token_budget,
         workspace_path=workspace_path,
         session_id=session_id,
     )
+    status_label = "abstained" if res.get("abstained") else "success"
+    log_activity(
+        tool="recall",
+        client=session_id or "antigravity",
+        operation=f"Context query: '{query[:45]}...'",
+        status=status_label,
+        workspace=str(workspace_path or "current"),
+        branch=res.get("branch", "main"),
+        project_id=res.get("project_id", "default"),
+        details={
+            "retrieved_tokens": res.get("retrieved_tokens", 0),
+            "savings_pct": res.get("savings_pct", 0),
+            "latency_ms": res.get("latency_ms", 0),
+            "memories_returned": res.get("memories_returned", 0),
+            "abstained": res.get("abstained", False),
+            "has_handover": bool(res.get("handover")),
+        },
+    )
+    return res
 
 
 @mcp.tool()
@@ -83,7 +103,7 @@ def remember(
     Enforces the authority matrix (user > verified > agent), taint quarantine for
     external_untrusted sources, deduplication, and branch-aware supersession in Kuzu.
     """
-    return get_service().remember(
+    res = get_service().remember(
         kind=kind,
         topic=topic,
         subject_key=subject_key,
@@ -99,6 +119,25 @@ def remember(
         session_id=session_id,
         workspace_path=workspace_path,
     )
+    log_activity(
+        tool="remember",
+        client=agent_name or "antigravity",
+        operation=f"Stored {kind}: '{title[:45]}'",
+        status=res.get("status", "recorded"),
+        workspace=str(workspace_path or "current"),
+        branch=res.get("branch", branch or "main"),
+        project_id=res.get("project_id", "default"),
+        details={
+            "memory_id": res.get("memory_id"),
+            "subject_key": subject_key,
+            "kind": kind,
+            "authority": authority,
+            "tainted": res.get("tainted", False),
+            "superseded_id": res.get("superseded_id"),
+            "conflict_type": res.get("conflict_type"),
+        },
+    )
+    return res
 
 
 @mcp.tool()
@@ -115,7 +154,7 @@ def handoff(
     Automatically enriches the checkpoint with live Git HEAD commit and uncommitted dirty files.
     Ensures the next session or agent resumes seamlessly with exact state and next steps.
     """
-    return get_service().handoff(
+    res = get_service().handoff(
         summary=summary,
         next_steps=next_steps,
         blockers=blockers,
@@ -123,6 +162,23 @@ def handoff(
         session_id=session_id,
         workspace_path=workspace_path,
     )
+    log_activity(
+        tool="handoff",
+        client=agent_name or "antigravity",
+        operation=f"Created checkpoint: '{summary[:45]}...'",
+        status=res.get("status", "handover_ready"),
+        workspace=str(workspace_path or "current"),
+        branch=res.get("branch", "main"),
+        project_id=res.get("project_id", "default"),
+        details={
+            "handover_id": res.get("handover_id"),
+            "dirty_files": res.get("dirty_files", []),
+            "dirty_count": len(res.get("dirty_files", [])),
+            "base_commit": res.get("base_commit"),
+            "blockers": blockers,
+        },
+    )
+    return res
 
 
 @mcp.tool()
@@ -136,7 +192,21 @@ def forget(
     with mathematical 0-leak verification. Call whenever the user asks to remove, forget,
     or delete past information.
     """
-    return get_service().forget(target=target, workspace_path=workspace_path)
+    res = get_service().forget(target=target, workspace_path=workspace_path)
+    log_activity(
+        tool="forget",
+        client="user",
+        operation=f"Redacted target: '{target[:40]}'",
+        status="success" if res.get("verification_passed") else "failed",
+        workspace=str(workspace_path or "current"),
+        details={
+            "scrubbed_memories": res.get("scrubbed_memories", 0),
+            "scrubbed_sources": res.get("scrubbed_sources", 0),
+            "scrubbed_handovers": res.get("scrubbed_handovers", 0),
+            "verification_passed": res.get("verification_passed", False),
+        },
+    )
+    return res
 
 
 def main() -> None:
