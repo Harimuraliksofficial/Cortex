@@ -189,7 +189,7 @@ class MemoryService:
         candidates.sort(key=lambda x: x["score"], reverse=True)
 
         # 3. Format Context Markdown
-        sections = [f"# Knowledge Brain Context (Repo: {git_info['repo_name']} | Branch: {branch})"]
+        sections = [f"# Cortex Context (Repo: {git_info['repo_name']} | Branch: {branch})"]
 
         if git_info["dirty_files"]:
             sections.append(f"> Note: Currently modified uncommitted files on disk: {', '.join(git_info['dirty_files'])}")

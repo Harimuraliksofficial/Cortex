@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Memory Manager is the core logic of Knowledge Brain.
+The Memory Manager is the core logic of Cortex.
 
 It sits between agents/MCP tools and the database.
 
@@ -199,7 +199,7 @@ If unresolved, the system should preserve uncertainty.
 
 # Abstention
 
-The Knowledge Brain must be allowed to say:
+Cortex must be allowed to say:
 
 ```text
 I don't know.

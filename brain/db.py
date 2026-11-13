@@ -2,7 +2,7 @@ import os
 import kuzu
 from typing import Optional, Dict, Any
 
-DEFAULT_DB_PATH = os.path.expanduser("~/.knowledge-brain/brain.kuzu")
+DEFAULT_DB_PATH = os.path.expanduser("~/.cortex/cortex.kuzu")
 
 LEAN_DDL = [
     # 1. Memory node: Active decisions, constraints, failed attempts

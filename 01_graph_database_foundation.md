@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This is the lowest layer of the Knowledge Brain. Its responsibility is to persist structured knowledge so that it survives process restarts, agent restarts, session changes, and handovers between different AI tools.
+This is the lowest layer of Cortex. Its responsibility is to persist structured knowledge so that it survives process restarts, agent restarts, session changes, and handovers between different AI tools.
 
 The graph database is **not** responsible for deciding whether something should be remembered. It is also not responsible for talking directly to OpenCode or Antigravity. It is the durable storage foundation that higher layers use.
 
@@ -58,7 +58,7 @@ Example:
 Workspace: HackathonTeam
 ```
 
-A global Knowledge Brain can contain multiple workspaces and projects while keeping them logically separated.
+A global Cortex database can contain multiple workspaces and projects while keeping them logically separated.
 
 ---
 
@@ -264,7 +264,7 @@ valid_until: null
 status: active
 ```
 
-This makes the Knowledge Brain capable of answering both:
+This makes Cortex capable of answering both:
 
 - What is true now?
 - What was believed or active previously?

@@ -1,6 +1,6 @@
-# Agent Guidelines for Knowledge Brain Integration
+# Agent Guidelines for Cortex Integration
 
-This repository is integrated with **Knowledge Brain** via the Model Context Protocol (MCP).
+This repository is integrated with **Cortex** via the Model Context Protocol (MCP).
 Use these guidelines to keep project knowledge synchronized across sessions and agents.
 
 ## When to Call MCP Tools

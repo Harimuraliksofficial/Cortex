@@ -1,6 +1,6 @@
 # Cortex: Persistent Graph Memory for Coding Agents
 
-**Cortex (Knowledge Brain)** is a high-performance Model Context Protocol (MCP) server that provides AI coding agents with **persistent, branch-aware, and mutable memory** powered by an embedded graph database ([KùzuDB](https://kuzudb.com)).
+**Cortex** is a high-performance Model Context Protocol (MCP) server that provides AI coding agents with **persistent, branch-aware, and mutable memory** powered by an embedded graph database ([KùzuDB](https://kuzudb.com)).
 
 Unlike traditional vector databases that suffer from outdated context, conflicting documents, and context bloat, Cortex tracks **active architectural decisions, explicit supersession lineages, negative knowledge (failed attempts), and task handovers**.
 
@@ -45,10 +45,18 @@ Unlike traditional vector databases that suffer from outdated context, conflicti
 
 ### 1. Installation
 
+Install directly via `pip` from GitHub:
+
+```bash
+pip install git+https://github.com/Harimuraliksofficial/Cortex.git
+```
+
+Or clone for development:
+
 ```bash
 git clone https://github.com/Harimuraliksofficial/Cortex.git
 cd Cortex
-pip install -r requirements.txt
+pip install -e .
 ```
 
 ### 2. Run the Benchmark
@@ -77,11 +85,10 @@ Add Cortex to `~/.gemini/config/mcp_config.json` or `.agents/mcp_config.json`:
 ```json
 {
   "mcpServers": {
-    "knowledge-brain": {
-      "command": "python",
-      "args": ["-m", "brain.server"],
+    "cortex": {
+      "command": "cortex",
+      "args": [],
       "env": {
-        "PYTHONPATH": ".",
         "PYTHONIOENCODING": "utf-8"
       }
     }
@@ -96,11 +103,10 @@ Add Cortex to `~/.config/opencode/opencode.jsonc` or `opencode.json`:
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "knowledge-brain": {
+    "cortex": {
       "type": "local",
-      "command": ["python", "-m", "brain.server"],
+      "command": ["cortex"],
       "environment": {
-        "PYTHONPATH": ".",
         "PYTHONIOENCODING": "utf-8"
       }
     }

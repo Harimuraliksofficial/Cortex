@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "knowledge-brain": {
+    "cortex": {
       "type": "stdio",
       "command": "python",
       "args": ["-m", "brain.server"],

@@ -1,4 +1,4 @@
-"""Cortex Knowledge Brain: Lean persistent graph memory for AI coding agents."""
+"""Cortex: Lean persistent graph memory for AI coding agents."""
 
 from brain.db import Database, get_db
 from brain.memory_service import MemoryService

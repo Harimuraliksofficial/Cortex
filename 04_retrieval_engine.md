@@ -6,7 +6,7 @@ The Retrieval Engine answers:
 
 > What does this agent need to know right now?
 
-Its job is not to return the entire Knowledge Brain.
+Its job is not to return the entire Cortex graph.
 
 Its job is to retrieve a small, relevant, trustworthy context package.
 

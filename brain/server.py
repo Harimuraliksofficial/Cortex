@@ -8,9 +8,9 @@ from brain.db import get_db
 
 # Initialize FastMCP application
 mcp = FastMCP(
-    name="knowledge-brain",
+    name="cortex",
     instructions="""
-    Knowledge Brain is a persistent graph memory server for coding agents.
+    Cortex is a persistent graph memory server for coding agents.
     It tracks architectural decisions, technical constraints, failed approaches, and task handovers.
     Guidelines:
     1. At the start of a task, call `recall(query="...")` to fetch active decisions, constraints, and open handovers.
@@ -33,7 +33,7 @@ def recall(query: str = "", token_budget: int = 1200, repo_path: str = "") -> st
         target_path = repo_path.strip() or None
         res = service.recall(query=query, token_budget=token_budget, repo_path=target_path)
         metrics = res["metrics"]
-        header = f"<!-- KnowledgeBrain: {metrics['retrieved_tokens']} tokens (saved {metrics['savings_pct']}% vs full history, {metrics['latency_ms']}ms) -->\n"
+        header = f"<!-- Cortex: {metrics['retrieved_tokens']} tokens (saved {metrics['savings_pct']}% vs full history, {metrics['latency_ms']}ms) -->\n"
         return header + res["context"]
     finally:
         db.close()
